@@ -4,6 +4,7 @@ use csv::WriterBuilder;
 use fakeit::{address, company, contact, datetime, name, words};
 use rand::{seq::SliceRandom, Rng};
 use std::{fs::File, io::BufWriter, path::Path};
+use std::collections::HashSet;
 
 type CsvW = csv::Writer<BufWriter<File>>;
 
@@ -112,11 +113,24 @@ fn gen_prestamo(
 ) -> Result<()> {
     let mut w = writer("prestamo.csv")?;
     let mut rng = rand::thread_rng();
-    for _ in 0..n {
-        let libro = libro_ids.choose(&mut rng).unwrap();
+    let mut used_combinations = HashSet::new();
+    
+    let mut count = 0;
+    while count < n {
+        let libro = *libro_ids.choose(&mut rng).unwrap();
         let cod = estudiante_codes.choose(&mut rng).unwrap();
         let codigo_prestamo: String = format!("{:0>6}", rng.gen_range(1..999999));
         let anio = rng.gen_range(2020..=2025);
+        
+        // La clave primaria compuesta es (codigo_prestamo, anio_prestamo)
+        let combination_key = format!("{}-{}", codigo_prestamo, anio);
+        
+        if used_combinations.contains(&combination_key) {
+            continue;
+        }
+        
+        used_combinations.insert(combination_key);
+        
         w.write_record(&[
             libro.to_string(),
             cod.to_string(), 
@@ -125,7 +139,10 @@ fn gen_prestamo(
             codigo_prestamo,
             anio.to_string(),
         ])?;
+        
+        count += 1;
     }
+    
     Ok(())
 }
 
@@ -137,11 +154,27 @@ fn gen_autor_libro(
 ) -> Result<()> {
     let mut w = writer("autor_libro.csv")?;
     let mut rng = rand::thread_rng();
-    for id in first_id..first_id + n {
-        let libro = libro_ids.choose(&mut rng).unwrap();
-        let autor = autor_ids.choose(&mut rng).unwrap();
+    let mut used_combinations = HashSet::new();
+    
+    let mut count = 0;
+    let mut id = first_id;
+    
+    while count < n {
+        let libro = *libro_ids.choose(&mut rng).unwrap();
+        let autor = *autor_ids.choose(&mut rng).unwrap();
+        
+        // Verificar que no se repita la combinación autor-libro
+        let combination_key = format!("{}-{}", autor, libro);
+        
+        if used_combinations.contains(&combination_key) {
+            continue;
+        }
+        
+        used_combinations.insert(combination_key);
+        
         let ejemplares = rng.gen_range(1..1000).to_string();
         let precio = format!("{:.2}", rng.gen_range(10.0..100.0));
+        
         w.write_record(&[
             id.to_string(),
             libro.to_string(),
@@ -150,7 +183,11 @@ fn gen_autor_libro(
             random_date(),
             precio,
         ])?;
+        
+        id += 1;
+        count += 1;
     }
+    
     Ok(())
 }
 
@@ -179,9 +216,22 @@ fn gen_libro_autor_tesis(
 ) -> Result<()> {
     let mut w = writer("libro_autor_tesis.csv")?;
     let mut rng = rand::thread_rng();
-    for _ in 0..n {
-        let libro = libro_ids.choose(&mut rng).unwrap();
-        let autor_tesis = autor_tesis_ids.choose(&mut rng).unwrap();
+    let mut used_combinations = HashSet::new();
+    
+    let mut count = 0;
+    while count < n {
+        let libro = *libro_ids.choose(&mut rng).unwrap();
+        let autor_tesis = *autor_tesis_ids.choose(&mut rng).unwrap();
+        
+        // La clave primaria compuesta es (autor_tesis_id, libro_id)
+        let combination_key = format!("{}-{}", autor_tesis, libro);
+        
+        if used_combinations.contains(&combination_key) {
+            continue;
+        }
+        
+        used_combinations.insert(combination_key);
+        
         let precio = format!("{:.2}", rng.gen_range(15.0..120.0));
         w.write_record(&[
             autor_tesis.to_string(),
@@ -189,7 +239,10 @@ fn gen_libro_autor_tesis(
             precio,
             random_date(),
         ])?;
+        
+        count += 1;
     }
+    
     Ok(())
 }
 
@@ -211,15 +264,17 @@ fn main() -> Result<()> {
     let editorial_ids: Vec<u32> = (1..=n_editorial).collect();
 
     gen_estudiante(10_000, n_estudiante)?;
+
     let estudiante_codes: Vec<String> = (0..n_estudiante)
         .map(|i| format!("{:0>6}", 10_000 + i))
         .collect();
-
+    
     let dept_ids: Vec<u32> = (1..=n_dept).collect();
     gen_autor(1, n_autor, &dept_ids)?;
     let autor_ids: Vec<u32> = (1..=n_autor).collect();
-
-    gen_libro(1, n_libro, &editorial_ids)?;
+    
+    gen_libro(1, n_libro, &editorial_ids)?; 
+    
     let libro_ids: Vec<u32> = (1..=n_libro).collect();
 
     gen_prestamo(n_prestamo, &libro_ids, &estudiante_codes)?;
