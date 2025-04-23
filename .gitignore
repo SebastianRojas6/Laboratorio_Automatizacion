@@ -1,0 +1,13 @@
+# Rust
+
+target/
+debug/
+Cargo.lock
+
+# Ides
+.idea
+.vscode
+
+# env
+.env
+
