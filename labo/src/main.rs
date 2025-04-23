@@ -20,7 +20,7 @@ fn random_date() -> String {
     let d = datetime::date();
     let ndt = NaiveDateTime::from_timestamp_opt(d.secs, d.nsecs).unwrap();
     let dt: DateTime<Utc> = DateTime::<Utc>::from_utc(ndt, Utc);
-    dt.date_naive().to_string() // "YYYY-MM-DD"
+    dt.date_naive().to_string() // Así lo genera la librería -> "YYYY-MM-DD"
 }
 
 // Data random
@@ -119,7 +119,7 @@ fn gen_prestamo(
         let anio = rng.gen_range(2020..=2025);
         w.write_record(&[
             libro.to_string(),
-            cod.to_string(),  // Corregido: convertir &String a String
+            cod.to_string(), 
             random_date(),
             random_date(),
             codigo_prestamo,
@@ -193,10 +193,8 @@ fn gen_libro_autor_tesis(
     Ok(())
 }
 
-//------------------ MAIN -----------------------------------------------------
-
 fn main() -> Result<()> {
-    // Parámetros de volumen
+    // Parámetros (por si acaso xdd)
     let n_dept = 25;
     let n_editorial = 50;
     let n_estudiante = 2_000;
