@@ -14,7 +14,6 @@ pub fn gen_autor_tesis(first_id: u32, n: u32, dept_ids: &[u32]) -> Result<()> {
             name::last(),
             name::last(),
             random_date(),
-            random_date(),
             dep.to_string(),
         ])?;
     }
