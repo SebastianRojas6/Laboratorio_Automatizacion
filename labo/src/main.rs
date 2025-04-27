@@ -25,11 +25,11 @@ fn main() -> Result<()> {
 
     let n_dept = 50;
     let n_editorial = 5_000;
-    let n_estudiante = 200_000;
+    let n_estudiante = 1_200_000;
     let n_autor = 150_000;
     let n_libro = 250_000;
-    let n_prestamo = 500_000;
-    let n_autor_libro = 200_000;
+    let n_prestamo = 1_500_000;
+    let n_autor_libro = 1_100_000;
     let n_autor_tesis = 25_000;
     let n_libro_autor_tesis = 30_000;
 
@@ -88,7 +88,6 @@ fn main() -> Result<()> {
     
     let autor_tesis_ids = Arc::new(autor_tesis_handle.join().unwrap()?);
     
-    // Las siguientes operaciones pueden ejecutarse en paralelo
     handles.clear();
     
     // Préstamo
