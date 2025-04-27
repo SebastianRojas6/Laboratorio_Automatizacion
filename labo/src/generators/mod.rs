@@ -1,0 +1,9 @@
+pub mod autor;
+pub mod autor_libro;
+pub mod autor_tesis;
+pub mod departamento;
+pub mod editorial;
+pub mod estudiante;
+pub mod libro;
+pub mod libro_autor_tesis;
+pub mod prestamo;
