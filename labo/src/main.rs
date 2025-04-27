@@ -25,12 +25,12 @@ fn main() -> Result<()> {
 
     let n_dept = 50;
     let n_editorial = 5_000;
-    let n_estudiante = 100_000;
-    let n_autor = 50_000;
-    let n_libro = 100_000;
+    let n_estudiante = 200_000;
+    let n_autor = 150_000;
+    let n_libro = 250_000;
     let n_prestamo = 500_000;
-    let n_autor_libro = 150_000;
-    let n_autor_tesis = 20_000;
+    let n_autor_libro = 200_000;
+    let n_autor_tesis = 25_000;
     let n_libro_autor_tesis = 30_000;
 
     gen_departamento(n_dept)?;
