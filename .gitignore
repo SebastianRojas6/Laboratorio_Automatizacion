@@ -12,12 +12,4 @@ Cargo.lock
 .env
 
 # output
-output/autor_libro.csv
-output/autor_tesis.csv
-output/autor.csv
-output/departamento.csv
-output/editorial.csv
-output/estudiante.csv
-output/libro_autor_tesis.csv
-output/libro.csv
-output/prestamo.csv
+output/
