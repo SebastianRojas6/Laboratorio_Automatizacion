@@ -7,8 +7,8 @@ pub fn gen_autor_libro(
     first_id: u32,
     n: u32,
     libro_ids: &[u32],
-    autor_ids: &[u32],
-) -> Result<()> {
+    autor_ids: &[u32],) -> Result<()> {
+
     let mut w = create_writer("autor_libro.csv")?;
     let mut rng = thread_rng();
     let mut used_combinations = HashSet::new();
@@ -22,8 +22,8 @@ pub fn gen_autor_libro(
         
         let combination_key = format!("{}-{}", autor, libro);
         if used_combinations.contains(&combination_key) {
-            continue;
-        }
+            continue;}
+            
         used_combinations.insert(combination_key);
         
         let ejemplares = rng.gen_range(1..1000).to_string();
